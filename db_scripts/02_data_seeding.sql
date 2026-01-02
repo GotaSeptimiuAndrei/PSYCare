@@ -5,38 +5,41 @@ INSERT INTO roles (name) VALUES
 ON CONFLICT (name) DO NOTHING;
 
 
-INSERT INTO users (email, password_hash, full_name)
-VALUES ('admin@mindwell.com', '$2a$10$eAccYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORr7x.hWETncCzof9G', 'System Administrator', true)
+INSERT INTO users (email, password_hash, full_name, role_id)
+SELECT 
+    'admin@mindwell.com', 
+    '$2a$10$eAccYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORr7x.hWETncCzof9G', 
+    'System Administrator',
+    r.id
+FROM roles r WHERE r.name = 'ROLE_ADMIN'
 ON CONFLICT (email) DO NOTHING;
 
-INSERT INTO users (email, password_hash, full_name)
-VALUES ('sarah.smith@mindwell.com', '$2a$10$eAccYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORr7x.hWETncCzof9G', 'Dr. Sarah Smith', true)
+INSERT INTO users (email, password_hash, full_name, role_id)
+SELECT 
+    'sarah.smith@mindwell.com', 
+    '$2a$10$eAccYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORr7x.hWETncCzof9G', 
+    'Dr. Sarah Smith',
+    r.id
+FROM roles r WHERE r.name = 'ROLE_DOCTOR'
 ON CONFLICT (email) DO NOTHING;
 
-INSERT INTO users (email, password_hash, full_name)
-VALUES ('john.doe@mindwell.com', '$2a$10$eAccYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORr7x.hWETncCzof9G', 'John Doe', true)
+INSERT INTO users (email, password_hash, full_name, role_id)
+SELECT 
+    'john.doe@mindwell.com', 
+    '$2a$10$eAccYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORr7x.hWETncCzof9G', 
+    'John Doe',
+    r.id
+FROM roles r WHERE r.name = 'ROLE_PATIENT'
 ON CONFLICT (email) DO NOTHING;
 
-INSERT INTO users (email, password_hash, full_name)
-VALUES ('jane.roe@mindwell.com', '$2a$10$eAccYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORr7x.hWETncCzof9G', 'Jane Roe', true)
+INSERT INTO users (email, password_hash, full_name, role_id)
+SELECT 
+    'jane.roe@mindwell.com', 
+    '$2a$10$eAccYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORr7x.hWETncCzof9G', 
+    'Jane Roe',
+    r.id
+FROM roles r WHERE r.name = 'ROLE_PATIENT'
 ON CONFLICT (email) DO NOTHING;
-
-
-INSERT INTO users_roles (user_id, role_id)
-SELECT u.id, r.id FROM users u, roles r WHERE u.email = 'admin@mindwell.com' AND r.name = 'ROLE_ADMIN'
-ON CONFLICT DO NOTHING;
-
-INSERT INTO users_roles (user_id, role_id)
-SELECT u.id, r.id FROM users u, roles r WHERE u.email = 'sarah.smith@mindwell.com' AND r.name = 'ROLE_DOCTOR'
-ON CONFLICT DO NOTHING;
-
-INSERT INTO users_roles (user_id, role_id)
-SELECT u.id, r.id FROM users u, roles r WHERE u.email = 'john.doe@mindwell.com' AND r.name = 'ROLE_PATIENT'
-ON CONFLICT DO NOTHING;
-
-INSERT INTO users_roles (user_id, role_id)
-SELECT u.id, r.id FROM users u, roles r WHERE u.email = 'jane.roe@mindwell.com' AND r.name = 'ROLE_PATIENT'
-ON CONFLICT DO NOTHING;
 
 
 INSERT INTO exercises (title, description, content_url, created_by_user_id)
