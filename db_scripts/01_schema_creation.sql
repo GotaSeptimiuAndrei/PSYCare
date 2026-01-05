@@ -65,6 +65,18 @@ ALTER TABLE patient_exercises
     ADD CONSTRAINT fk_patient_exercises_doctor FOREIGN KEY (assigned_by_user_id) REFERENCES users(id) ON DELETE SET NULL;
 
 
+CREATE TABLE IF NOT EXISTS assigned_patients (
+    id BIGSERIAL PRIMARY KEY,
+    doctor_id BIGINT NOT NULL,
+    patient_id BIGINT NOT NULL,
+    assigned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_assigned_patients_patient UNIQUE (patient_id),
+    CONSTRAINT fk_assigned_patients_doctor FOREIGN KEY (doctor_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_assigned_patients_patient FOREIGN KEY (patient_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT chk_assigned_patients_different CHECK (doctor_id != patient_id)
+);
+
+
 -- Speed up login lookups by email
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 
@@ -76,3 +88,6 @@ CREATE INDEX IF NOT EXISTS idx_patient_exercises_patient_status ON patient_exerc
 
 -- Speed up doctors seeing whom they assigned exercises to
 CREATE INDEX IF NOT EXISTS idx_patient_exercises_doctor ON patient_exercises(assigned_by_user_id);
+
+-- Speed up retrieving assigned patients for a doctor
+CREATE INDEX IF NOT EXISTS idx_assigned_patients_doctor ON assigned_patients(doctor_id);
