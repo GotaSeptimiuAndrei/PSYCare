@@ -4,6 +4,16 @@ INSERT INTO roles (name) VALUES
     ('ROLE_PATIENT')
 ON CONFLICT (name) DO NOTHING;
 
+-- ============================================================================
+-- TEST CREDENTIALS FOR POSTMAN:
+-- All test users use the same password: "password"
+-- BCrypt hash: $2a$10$eAccYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORr7x.hWETncCzof9G
+-- 
+-- Doctor: sarah.smith@mindwell.com / password
+-- Patient: john.doe@mindwell.com / password
+-- Patient: jane.roe@mindwell.com / password
+-- Admin: admin@mindwell.com / password
+-- ============================================================================
 
 INSERT INTO users (email, password_hash, full_name, role_id)
 SELECT 
@@ -40,6 +50,28 @@ SELECT
     r.id
 FROM roles r WHERE r.name = 'ROLE_PATIENT'
 ON CONFLICT (email) DO NOTHING;
+
+
+-- Assign patients to doctors
+INSERT INTO assigned_patients (doctor_id, patient_id, assigned_at)
+SELECT 
+    d.id, 
+    p.id, 
+    CURRENT_TIMESTAMP - INTERVAL '10 days'
+FROM users d, users p
+WHERE d.email = 'sarah.smith@mindwell.com' 
+  AND p.email = 'john.doe@mindwell.com'
+ON CONFLICT (patient_id) DO NOTHING;
+
+INSERT INTO assigned_patients (doctor_id, patient_id, assigned_at)
+SELECT 
+    d.id, 
+    p.id, 
+    CURRENT_TIMESTAMP - INTERVAL '8 days'
+FROM users d, users p
+WHERE d.email = 'sarah.smith@mindwell.com' 
+  AND p.email = 'jane.roe@mindwell.com'
+ON CONFLICT (patient_id) DO NOTHING;
 
 
 INSERT INTO exercises (title, description, content_url, created_by_user_id)

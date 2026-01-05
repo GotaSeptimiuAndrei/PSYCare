@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS assigned_patients CASCADE;
 DROP TABLE IF EXISTS patient_exercises CASCADE;
 DROP TABLE IF EXISTS mood_entries CASCADE;
 DROP TABLE IF EXISTS users_roles CASCADE;
