@@ -74,4 +74,8 @@ public class User {
   @OneToMany(mappedBy = "assignedBy", cascade = CascadeType.ALL, orphanRemoval = true)
   @Builder.Default
   private Set<PatientExercise> assignedExercises = new HashSet<>();
+
+  @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
+  private Set<AssignedPatient> assignedPatients = new HashSet<>();
 }
