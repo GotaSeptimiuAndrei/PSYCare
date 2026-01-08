@@ -101,6 +101,8 @@ public class SecurityConfig {
             .requestMatchers("/api/my-assignments/**").hasRole("PATIENT")
 
             .requestMatchers("/api/assignments/**").hasRole("DOCTOR")
+            .requestMatchers(HttpMethod.GET, "/api/patients/**/mood-history")
+            .hasAnyRole("PATIENT", "DOCTOR")
             .requestMatchers("/api/patients/**").hasRole("DOCTOR") // View patient list
 
             .anyRequest().authenticated()
