@@ -17,4 +17,6 @@ public interface AssignedPatientRepository extends JpaRepository<AssignedPatient
   Page<AssignedPatient> findByDoctor_Id(@Param("doctorId") Long doctorId, Pageable pageable);
 
   Optional<AssignedPatient> findByPatient(User patient);
+
+  boolean existsByDoctorAndPatient(User doctor, User patient);
 }

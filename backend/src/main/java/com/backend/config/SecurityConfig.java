@@ -98,12 +98,13 @@ public class SecurityConfig {
             .authenticated()
 
             .requestMatchers("/api/moods/**").hasRole("PATIENT")
-            .requestMatchers("/api/my-assignments/**").hasRole("PATIENT")
+            .requestMatchers("/api/patient/tasks/**").hasRole("PATIENT")
+            .requestMatchers("/api/assignments/{taskId}/complete").hasRole("PATIENT")
 
             .requestMatchers("/api/assignments/**").hasRole("DOCTOR")
-            .requestMatchers(HttpMethod.GET, "/api/patients/**/mood-history")
+            .requestMatchers(HttpMethod.GET, "/api/patients/{id}/mood-history")
             .hasAnyRole("PATIENT", "DOCTOR")
-            .requestMatchers("/api/patients/**").hasRole("DOCTOR") // View patient list
+            .requestMatchers("/api/patients/**").hasRole("DOCTOR")
 
             .anyRequest().authenticated()
         )

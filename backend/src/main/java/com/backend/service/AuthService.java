@@ -48,6 +48,7 @@ public class AuthService {
     return loginUser(new LoginDTO(request.email(), request.password()));
   }
 
+  @Transactional(readOnly = true)
   public LoginResponseDTO loginUser(LoginDTO request) {
     Authentication auth = authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(request.email(), request.password())
