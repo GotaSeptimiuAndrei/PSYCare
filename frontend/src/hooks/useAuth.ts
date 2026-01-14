@@ -52,3 +52,31 @@ export const useAuth = () => {
     isLoggedIn: !!token,
   };
 };
+
+export const getId = () => {
+  const token = localStorage.getItem("token");
+  if (!token || isTokenExpired(token)) {
+    return null;
+  }
+
+  try {
+    const decoded: JWTData = jwtDecode(token);
+    return decoded.userId;
+  } catch {
+    return null;
+  }
+}
+
+export const getRole = () => {
+  const token = localStorage.getItem("token");
+  if (!token || isTokenExpired(token)) {
+    return null;
+  }
+
+  try {
+    const decoded: JWTData = jwtDecode(token);
+    return extractRole(decoded.roles);
+  } catch {
+    return null;
+  }
+}

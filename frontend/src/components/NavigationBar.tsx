@@ -40,11 +40,11 @@ export default function Navbar() {
         <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center", gap: 2 }}>
           {role === "doctor" && (
             <>
-              <Button color="inherit" onClick={() => navigate("/link1")}>
-                Link_1
+              <Button color="inherit" onClick={() => navigate("/doctor-dashboard")}>
+                Dashboard
               </Button>
-              <Button color="inherit" onClick={() => navigate("/link2")}>
-                Link_2
+              <Button color="inherit" onClick={() => navigate("/exercises")}>
+                Exercises
               </Button>
             </>
           )}
@@ -56,9 +56,6 @@ export default function Navbar() {
               </Button>
               <Button color="inherit" onClick={() => navigate("/mood-tracker")}>
                 Mood Log
-              </Button>
-              <Button color="inherit" onClick={() => navigate("/")}>
-                Link_4
               </Button>
             </>
           )}

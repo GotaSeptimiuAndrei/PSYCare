@@ -9,10 +9,10 @@ export function useGetPatients(page: number, size: number = 10) {
   });
 }
 
-export function usePatientMoodHistory(patientId: number) {
+export function usePatientMoodHistory(patientId: number, period: string = "1M") {
   return useQuery({
-    queryKey: ["patientMoodHistory", patientId],
-    queryFn: () => getPatientMoodHistory(patientId),
+    queryKey: ["patientMoodHistory", patientId, period],
+    queryFn: () => getPatientMoodHistory(patientId, period),
     enabled: !!patientId,
   });
 }

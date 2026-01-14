@@ -29,7 +29,7 @@ export async function getPatients(page: number, size: number): Promise<PatientsR
   return response.data;
 }
 
-export async function getPatientMoodHistory(patientId: number): Promise<PatientMoodHistory[]> {
-  const response = await api.get<PatientMoodHistory[]>(`/${patientId}/mood-history`);
+export async function getPatientMoodHistory(patientId: number, period: string = "1M"): Promise<PatientMoodHistory[]> {
+  const response = await api.get<PatientMoodHistory[]>(`/${patientId}/mood-history`, { params: { period } });
   return response.data;
 }

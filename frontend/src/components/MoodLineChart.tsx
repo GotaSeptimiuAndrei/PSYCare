@@ -1,4 +1,3 @@
-// components/MoodLineChart.tsx
 import {
   LineChart,
   Line,
@@ -8,9 +7,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Box, Button, ButtonGroup } from "@mui/material";
-import { useState, useMemo } from "react";
 import MoodTooltip from "./MoodTooltip";
-import { filterByPeriod } from "../utils/timeFilter";
 import type { PatientMoodHistory } from "../types/patient";
 
 const periods = [
@@ -21,50 +18,37 @@ const periods = [
   { label: "1Y", days: 365 },
 ];
 
-export default function MoodLineChart({
-  data,
-}: {
+interface MoodLineChartProps {
   data: PatientMoodHistory[];
-}) {
-  const [days, setDays] = useState(30);
+  period: string; // current period
+  setPeriod: (period: string) => void; // setter to update period
+}
 
-  const filteredData = useMemo(
-    () => filterByPeriod(data, days),
-    [data, days]
-  );
-
+export default function MoodLineChart({ data, period, setPeriod }: MoodLineChartProps) {
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
-    <Box sx={{ width: "50%", mt: 2, justifyContent: "center" }}>
-      {/* Filters */}
-      <ButtonGroup size="small" sx={{ mb: 2 }}>
-        {periods.map((p) => (
-          <Button
-            key={p.label}
-            variant={days === p.days ? "contained" : "outlined"}
-            onClick={() => setDays(p.days)}
-          >
-            {p.label}
-          </Button>
-        ))}
-      </ButtonGroup>
+      <Box sx={{ width: "50%", mt: 2 }}>
+        <ButtonGroup size="small" sx={{ mb: 2 }}>
+          {periods.map((p) => (
+            <Button
+              key={p.label}
+              variant={period === p.label ? "contained" : "outlined"}
+              onClick={() => setPeriod(p.label)} // <-- triggers parent state update
+            >
+              {p.label}
+            </Button>
+          ))}
+        </ButtonGroup>
 
-      {/* Chart */}
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={filteredData}>
-          <XAxis dataKey="date" hide />
-          <YAxis domain={[1, 10]} hide />
-          <Tooltip content={<MoodTooltip />} />
-          <Line
-            type="monotone"
-            dataKey="score"
-            stroke="#1976d2"
-            strokeWidth={3}
-            dot={false}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    </Box>
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={data}>
+            <XAxis dataKey="date" hide />
+            <YAxis domain={[1, 10]} hide />
+            <Tooltip content={<MoodTooltip />} />
+            <Line type="monotone" dataKey="score" stroke="#1976d2" strokeWidth={3} dot={false} />
+          </LineChart>
+        </ResponsiveContainer>
+      </Box>
     </Box>
   );
 }
