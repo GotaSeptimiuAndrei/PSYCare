@@ -23,7 +23,7 @@ const getMoodLabel = (value: number) => {
 };
 
 export default function MoodLogger() {
-  const [mood, setMood] = useState(5); // initial slider value
+  const [mood, setMood] = useState(5);
   const [note, setNote] = useState("");
   const mutation = useLogMood();
 

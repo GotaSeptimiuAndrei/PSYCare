@@ -20,9 +20,7 @@ export const ProtectedRoute = ({
     return <Navigate to={redirectTo} replace />;
   }
 
-  // if route has a role requirement, check it
   if (requiredRole && userRole !== requiredRole) {
-    // redirect to their own dashboard if role doesn't match
     const dashboard = userRole === "doctor" ? "/doctor-dashboard" : "/patient-dashboard";
     return <Navigate to={dashboard} replace />;
   }

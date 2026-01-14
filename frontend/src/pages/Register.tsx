@@ -20,10 +20,7 @@ export default function Register() {
   const mutation = useMutation({
     mutationFn: (data: RegisterDTO) => register(data),
     onSuccess: (data) => {
-      // save JWT to localStorage
       localStorage.setItem("token", data.token);
-
-      // reload app to trigger useAuth and role-based routing
       window.location.reload();
     },
     onError: () => {
