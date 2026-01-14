@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { register } from "../api/auth";
 import type { Register as RegisterDTO } from "../types/auth";
-
+import { Link } from "react-router-dom";
 import {
   Box,
   Button,
@@ -101,6 +101,12 @@ export default function Register() {
             {mutation.isPending ? <CircularProgress size={24} /> : "Register"}
           </Button>
         </Box>
+        <Typography variant="body2" mt={2}>
+          Do you have an account?{" "}
+          <Link to="/login" style={{ textDecoration: "none", color: "#1976d2" }}>
+            Login
+          </Link>
+        </Typography>
       </Box>
     </Container>
   );
