@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 import { ProtectedRoute, PublicRoute } from "./components/ProtectedRoute";
 import { useAuth } from "./hooks/useAuth";
 import MoodTracker from "./pages/MoodTracker";
+import PatientDetails from "./pages/PatientDetails";
 
 const queryClient = new QueryClient();
 
@@ -77,6 +78,20 @@ function App() {
                 requiredRole="patient"
               >
                 <MoodTracker />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Patient history - Doctor view */}
+          <Route
+            path="/patient/:patientId"
+            element={
+              <ProtectedRoute
+                isLoggedIn={!!token}
+                userRole={role}
+                requiredRole="doctor"
+              >
+                <PatientDetails />
               </ProtectedRoute>
             }
           />
