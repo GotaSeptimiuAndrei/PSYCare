@@ -1,52 +1,42 @@
 import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
-
-interface JWTData {
-  sub: string;
-  roles: string[];
-  fullName: string;
-  userId: number;
-  exp: number;
-  iat: number;
-  iss: string;
-}
+import type { JWTData } from "../types/jwt";
+import { isTokenExpired } from "../utils/jwt";
 
 type UserRole = "doctor" | "patient" | null;
 
+const extractRole = (roles: string[]): UserRole => {
+  if (roles.includes("ROLE_DOCTOR")) return "doctor";
+  if (roles.includes("ROLE_PATIENT")) return "patient";
+  return null;
+};
+
 const getInitialAuth = () => {
-  const storedToken = localStorage.getItem("token");
-  if (!storedToken) return { token: null, role: null as UserRole };
+  const token = localStorage.getItem("token");
+
+  if (!token || isTokenExpired(token)) {
+    localStorage.removeItem("token");
+    return { token: null, role: null as UserRole };
+  }
 
   try {
-    const decoded: JWTData = jwtDecode(storedToken);
-    const role: UserRole = decoded.roles.includes("ROLE_DOCTOR")
-      ? "doctor"
-      : decoded.roles.includes("ROLE_PATIENT")
-      ? "patient"
-      : null;
-    return { token: storedToken, role };
+    const decoded: JWTData = jwtDecode(token);
+    return { token, role: extractRole(decoded.roles) };
   } catch {
+    localStorage.removeItem("token");
     return { token: null, role: null as UserRole };
   }
 };
 
 export const useAuth = () => {
   const [{ token, role }, setAuth] = useState(getInitialAuth);
-  const [loading] = useState(false);
 
   const login = (jwt: string) => {
+    if (isTokenExpired(jwt)) return;
+
     localStorage.setItem("token", jwt);
-    try {
-      const decoded: JWTData = jwtDecode(jwt);
-      const role: UserRole = decoded.roles.includes("ROLE_DOCTOR")
-        ? "doctor"
-        : decoded.roles.includes("ROLE_PATIENT")
-        ? "patient"
-        : null;
-      setAuth({ token: jwt, role });
-    } catch {
-      setAuth({ token: null, role: null });
-    }
+    const decoded: JWTData = jwtDecode(jwt);
+    setAuth({ token: jwt, role: extractRole(decoded.roles) });
   };
 
   const logout = () => {
@@ -54,5 +44,11 @@ export const useAuth = () => {
     setAuth({ token: null, role: null });
   };
 
-  return { token, role, login, logout, loading, isLoggedIn: !!token };
+  return {
+    token,
+    role,
+    login,
+    logout,
+    isLoggedIn: !!token,
+  };
 };

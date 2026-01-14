@@ -19,5 +19,3 @@ export async function register(data: Register): Promise<LoginResponse> {
   const response = await api.post<LoginResponse>('/register', data);
   return response.data;
 }
-
-
