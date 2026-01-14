@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { Box, Typography, Card, CardContent, CircularProgress } from "@mui/material";
 import NavigationBar from "../components/NavigationBar";
 import { usePatientMoodHistory } from "../hooks/usePatient";
+import MoodLineChart from "../components/MoodLineChart";
 
 export default function PatientProfile() {
   const { patientId } = useParams();
@@ -17,6 +18,7 @@ export default function PatientProfile() {
   return (
     <>
       <NavigationBar />
+      <MoodLineChart data={data} />
 
       <Box sx={{ p: 4, maxWidth: 800, mx: "auto" }}>
         <Typography variant="h4" gutterBottom>
@@ -42,23 +44,7 @@ export default function PatientProfile() {
             </CardContent>
           </Card>
         )) : (
-          <Card sx={{ mb: 2 }}>
-            <CardContent>
-              <Typography variant="h6">
-                Mood score: {data.score} / 10
-              </Typography>
-
-              <Typography variant="body2" color="text.secondary">
-                {new Date(data.date).toLocaleDateString()}
-              </Typography>
-
-              {data.note && (
-                <Typography sx={{ mt: 1 }}>
-                  {data.note}
-                </Typography>
-              )}
-            </CardContent>
-          </Card>
+          <Typography>No mood history available.</Typography>
         )}
       </Box>
     </>

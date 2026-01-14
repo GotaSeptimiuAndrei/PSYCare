@@ -13,5 +13,6 @@ export function usePatientMoodHistory(patientId: number) {
   return useQuery({
     queryKey: ["patientMoodHistory", patientId],
     queryFn: () => getPatientMoodHistory(patientId),
+    enabled: !!patientId,
   });
 }
