@@ -89,7 +89,6 @@ function App() {
               <ProtectedRoute
                 isLoggedIn={!!token}
                 userRole={role}
-                //requiredRole="doctor"
               >
                 <PatientDetails />
               </ProtectedRoute>
