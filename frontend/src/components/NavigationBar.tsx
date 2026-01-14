@@ -21,7 +21,7 @@ export default function Navbar() {
   const handleLogout = () => {
     logout();
     handleMenuClose();
-    //window.location.reload();
+    window.location.reload();
   };
 
   return (
