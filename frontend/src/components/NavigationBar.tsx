@@ -51,10 +51,13 @@ export default function Navbar() {
 
           {role === "patient" && (
             <>
-              <Button color="inherit" onClick={() => navigate("/link3")}>
-                Link_3
+              <Button color="inherit" onClick={() => navigate("/patient-dashboard")}>
+                Dashboard
               </Button>
-              <Button color="inherit" onClick={() => navigate("/link4")}>
+              <Button color="inherit" onClick={() => navigate("/mood-tracker")}>
+                Mood Log
+              </Button>
+              <Button color="inherit" onClick={() => navigate("/")}>
                 Link_4
               </Button>
             </>
