@@ -14,5 +14,10 @@ export function usePatientMoodHistory(patientId: number, period: string = "1M") 
     queryKey: ["patientMoodHistory", patientId, period],
     queryFn: () => getPatientMoodHistory(patientId, period),
     enabled: !!patientId,
+    retry: (failureCount, error: Error) => {
+      // Don't retry if it's a 403 Forbidden
+      if (error.response?.status === 403) return false;
+      return failureCount < 3; // optionally retry other errors up to 3 times
+    },
   });
 }

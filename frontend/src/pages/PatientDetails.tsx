@@ -47,7 +47,7 @@ export default function PatientProfile() {
     });
   };
 
-  if (role !== "doctor" && jwtId !== id) {
+  if ((role !== "doctor" && jwtId !== id) || isError) {
     return (
       <>
         <NavigationBar />
