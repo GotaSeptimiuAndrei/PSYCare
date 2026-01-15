@@ -38,7 +38,8 @@ public class PatientController {
   @GetMapping("/{patientId}/mood-history")
   public ResponseEntity<List<MoodChartDTO>> getPatientMoodHistory(
       @PathVariable Long patientId,
-      @RequestParam(defaultValue = "1M") String period) {
+      @RequestParam(defaultValue = "1M") String period, Authentication authentication) {
+    moodService.validateMoodAccess(authentication.getName(), patientId);
     return ResponseEntity.ok(moodService.getMoodHistory(patientId, period));
   }
 }

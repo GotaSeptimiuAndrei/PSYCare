@@ -1,4 +1,3 @@
-//import MoodLineChart from "../components/MoodLineChart";
 import NavigationBar from "../components/NavigationBar";
 import { CircularProgress, Box, Typography, Button, Card, CardContent, Divider, List, ListItem, ListItemText, Collapse, IconButton } from "@mui/material";
 import { usePatientMoodHistory } from "../hooks/usePatient";

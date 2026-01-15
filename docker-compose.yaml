@@ -14,19 +14,20 @@ services:
       - db_data:/var/lib/postgresql/data
       - ./db_scripts/01_schema_creation.sql:/docker-entrypoint-initdb.d/01_schema_creation.sql
       - ./db_scripts/03_data_seeding.sql:/docker-entrypoint-initdb.d/03_data_seeding.sql
+      - ./db_scripts/04_chart_data_seed.sql:/docker-entrypoint-initdb.d/04_chart_data_seed.sql
 
-  backend:
-    build: ./backend
-    container_name: psycare-backend
-    depends_on:
-      - db
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/PSYCareDB
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: 123Andrei
-      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
-    ports:
-      - "8080:8080"
+  #backend:
+  #  build: ./backend
+  #  container_name: psycare-backend
+  #  depends_on:
+  #    - db
+  #  environment:
+  #    SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/PSYCareDB
+  #    SPRING_DATASOURCE_USERNAME: postgres
+  #    SPRING_DATASOURCE_PASSWORD: 123Andrei
+  #    SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+  #  ports:
+  #    - "8080:8080"
 
 volumes:
   db_data:
