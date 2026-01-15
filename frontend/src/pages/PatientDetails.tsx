@@ -1,7 +1,13 @@
 import { useParams } from "react-router-dom";
-import { Box, Typography, Card, CardContent, CircularProgress } from "@mui/material";
+import {
+  Box, Typography, Card, CardContent, CircularProgress, Button,
+  Dialog, DialogTitle, DialogContent, DialogActions, TextField,
+  FormControl, InputLabel, Select, MenuItem
+} from "@mui/material";
 import NavigationBar from "../components/NavigationBar";
 import { usePatientMoodHistory } from "../hooks/usePatient";
+import { useGetAllExercises } from "../hooks/useExercise";
+import { useAssignHomework } from "../hooks/useTask";
 import MoodLineChart from "../components/MoodLineChart";
 import { getId, getRole } from "../hooks/useAuth";
 import { useState } from "react";
@@ -12,7 +18,34 @@ export default function PatientProfile() {
   const id = Number(patientId);
   const role = getRole();
   const [period, setPeriod] = useState("1M");
+
   const { data, isLoading, isError } = usePatientMoodHistory(id, period);
+
+  const { data: exercises } = useGetAllExercises();
+  const assignMutation = useAssignHomework();
+
+  const [open, setOpen] = useState(false);
+  const [selectedExercise, setSelectedExercise] = useState<number | string>("");
+  const [dueDate, setDueDate] = useState("");
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedExercise("");
+    setDueDate("");
+  };
+
+  const handleConfirmAssignment = () => {
+    assignMutation.mutate({
+      patientId: id,
+      exerciseId: Number(selectedExercise),
+      dueDate: dueDate
+    }, {
+      onSuccess: () => {
+        handleClose();
+      }
+    });
+  };
 
   if (role !== "doctor" && jwtId !== id) {
     return (
@@ -35,13 +68,19 @@ export default function PatientProfile() {
   return (
     <>
       <NavigationBar />
-      {/* Pass period state and setter to the chart */}
       <MoodLineChart data={data} period={period} setPeriod={setPeriod} />
 
       <Box sx={{ p: 4, maxWidth: 800, mx: "auto" }}>
-        <Typography variant="h4" gutterBottom>
-          Patient Mood History
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <Typography variant="h4" gutterBottom>
+            Patient Mood History
+          </Typography>
+          {role === "doctor" && (
+            <Button variant="contained" onClick={handleOpen}>
+              Assign Task
+            </Button>
+          )}
+        </Box>
 
         {data.length > 0 ? (
           data.map((entry, index) => (
@@ -59,6 +98,44 @@ export default function PatientProfile() {
           <Typography>No mood history available.</Typography>
         )}
       </Box>
+
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
+        <DialogTitle>Assign Exercise</DialogTitle>
+        <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 1 }}>
+          <FormControl fullWidth sx={{ mt: 1 }}>
+            <InputLabel>Select Exercise</InputLabel>
+            <Select
+              value={selectedExercise}
+              label="Select Exercise"
+              onChange={(e) => setSelectedExercise(e.target.value)}
+            >
+              {exercises?.map((ex) => (
+                <MenuItem key={ex.id} value={ex.id}>
+                  {ex.title}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            label="Due Date"
+            type="date"
+            fullWidth
+            InputLabelProps={{ shrink: true }}
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button
+            onClick={handleConfirmAssignment}
+            variant="contained"
+            disabled={!selectedExercise || !dueDate || assignMutation.isPending}
+          >
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
