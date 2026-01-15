@@ -39,7 +39,7 @@ export default function PatientProfile() {
     assignMutation.mutate({
       patientId: id,
       exerciseId: Number(selectedExercise),
-      dueDate: dueDate
+      assignedDate: dueDate
     }, {
       onSuccess: () => {
         handleClose();

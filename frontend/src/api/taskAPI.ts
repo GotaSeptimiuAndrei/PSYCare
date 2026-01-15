@@ -1,6 +1,6 @@
 import axios from "axios";
 import { isTokenExpired } from "../utils/jwt";
-import type { TaskAssignment } from "../types/task"; 
+import type { Task } from "../types/task"; 
 
 const API_URL = "http://localhost:8080/api";
 
@@ -24,7 +24,17 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export async function assignHomework(assignment: TaskAssignment): Promise<string> {
+export async function assignHomework(assignment: Task): Promise<string> {
   const response = await api.post<string>("/assignments", assignment);
+  return response.data;
+}
+
+export async function getMyTasks(): Promise<Task[]> {
+  const response = await api.get<Task[]>("/patient/tasks");
+  return response.data;
+}
+
+export async function completeTask(taskId: number): Promise<string> {
+  const response = await api.patch<string>(`/assignments/${taskId}/complete`);
   return response.data;
 }
