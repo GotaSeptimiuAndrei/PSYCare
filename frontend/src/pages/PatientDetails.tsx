@@ -3,11 +3,8 @@ import { Box, Typography, Card, CardContent, CircularProgress } from "@mui/mater
 import NavigationBar from "../components/NavigationBar";
 import { usePatientMoodHistory } from "../hooks/usePatient";
 import MoodLineChart from "../components/MoodLineChart";
-<<<<<<< HEAD
 import { getId, getRole } from "../hooks/useAuth";
 import { useState } from "react";
-=======
->>>>>>> 313c9ef (the doctor sees the chart for the patient)
 
 export default function PatientProfile() {
   const jwtId = getId();

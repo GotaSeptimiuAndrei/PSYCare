@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import DoctorDashboard from "./pages/DoctorDashboard";
 import PatientDashboard from "./pages/PatientDashboard";
 import Register from "./pages/Register";
+import Exercises from "./pages/Exercises"; 
 
 import { ProtectedRoute, PublicRoute } from "./components/ProtectedRoute";
 import { useAuth } from "./hooks/useAuth";
@@ -64,6 +65,20 @@ function App() {
                 requiredRole="patient"
               >
                 <PatientDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Exercises */}
+          <Route
+            path="/exercises"
+            element={
+              <ProtectedRoute
+                isLoggedIn={!!token}
+                userRole={role}
+                requiredRole="doctor"
+              >
+                <Exercises />
               </ProtectedRoute>
             }
           />
