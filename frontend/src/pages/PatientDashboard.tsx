@@ -28,8 +28,6 @@ export default function PatientDashboard() {
   const pendingTasks = tasks?.filter((t: Task) => t.status === 'PENDING') || [];
   const completedTasks = tasks?.filter((t: Task) => t.status === 'COMPLETED') || [];
 
-  console.log("Tasks from DB:", tasks);
-
   return (
     <div>
       <NavigationBar />
@@ -46,9 +44,6 @@ export default function PatientDashboard() {
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box sx={{ cursor: 'pointer', flexGrow: 1 }} onClick={() => task.id && handleExpand(task.id)}>
                   <Typography variant="h6">{task.exerciseTitle}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Due to: {task.assignedDate ? new Date(task.assignedDate).toLocaleDateString() : "No date"}
-                  </Typography>
                 </Box>
                 <IconButton onClick={() => task.id && handleExpand(task.id)}>
                   <span style={{

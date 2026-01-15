@@ -108,16 +108,18 @@ export default function Exercises() {
               </div>
               <p style={{ color: "#7f8c8d", lineHeight: "1.6", margin: "10px 0" }}>{ex.description}</p>
 
-              <div style={{ marginTop: '15px', paddingTop: '15px', borderTop: "1px solid #eee" }}>
-                <a
-                  href={ex.contentUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: '#3498db', textDecoration: 'none', fontWeight: '500', display: "inline-flex", alignItems: "center", gap: "5px" }}
-                >
-                  View Resources
-                </a>
-              </div>
+              {ex.contentUrl && ex.contentUrl.trim() !== "" && (
+                <div style={{ marginTop: '15px', paddingTop: '15px', borderTop: "1px solid #eee" }}>
+                  <a
+                    href={ex.contentUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: '#3498db', textDecoration: 'none', fontWeight: '500', display: "inline-flex", alignItems: "center", gap: "5px" }}
+                  >
+                    View Resources
+                  </a>
+                </div>
+              )}
             </div>
           ))}
         </div>
