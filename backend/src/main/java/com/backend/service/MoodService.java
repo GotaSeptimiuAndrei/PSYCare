@@ -4,8 +4,10 @@ import com.backend.dto.MoodChartDTO;
 import com.backend.dto.MoodLogDTO;
 import com.backend.model.MoodEntry;
 import com.backend.model.User;
+import com.backend.repository.AssignedPatientRepository;
 import com.backend.repository.MoodEntryRepository;
 import com.backend.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +29,30 @@ public class MoodService {
 
   private final MoodEntryRepository moodEntryRepository;
   private final UserRepository userRepository;
+  private final AssignedPatientRepository assignedPatientRepository;
+
+  @Transactional(readOnly = true)
+  public void validateMoodAccess(String requesterEmail, Long patientId) {
+    User requester = userRepository.findByEmail(requesterEmail)
+        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+    // 1. If requester is a PATIENT, they can only view their own history
+    if (requester.getRole().getName().equals("ROLE_PATIENT")) {
+      if (!requester.getId().equals(patientId)) {
+        throw new AccessDeniedException("You are not authorized to view this mood history.");
+      }
+    }
+    // 2. If requester is a DOCTOR, they must be assigned to the patient
+    else if (requester.getRole().getName().equals("ROLE_DOCTOR")) {
+      User patient = userRepository.findById(patientId)
+          .orElseThrow(() -> new EntityNotFoundException("Patient not found"));
+
+      boolean isAssigned = assignedPatientRepository.existsByDoctorAndPatient(requester, patient);
+      if (!isAssigned) {
+        throw new AccessDeniedException("You are not assigned to this patient.");
+      }
+    }
+  }
 
   @Transactional
   @CacheEvict(value = "moodHistory", allEntries = true)
