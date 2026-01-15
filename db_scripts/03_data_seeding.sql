@@ -18,7 +18,7 @@ ON CONFLICT (name) DO NOTHING;
 INSERT INTO users (email, password_hash, full_name, role_id)
 SELECT 
     'admin@mindwell.com', 
-    '$2a$10$eAccYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORr7x.hWETncCzof9G', 
+    '$2a$12$6K.s9wvwmhla9pH4YaBP4.NgVRbOq.F7LFf5Svsv32O9DQD68S9q6', 
     'System Administrator',
     r.id
 FROM roles r WHERE r.name = 'ROLE_ADMIN'
@@ -27,7 +27,7 @@ ON CONFLICT (email) DO NOTHING;
 INSERT INTO users (email, password_hash, full_name, role_id)
 SELECT 
     'sarah.smith@mindwell.com', 
-    '$2a$10$eAccYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORr7x.hWETncCzof9G', 
+    '$2a$12$6K.s9wvwmhla9pH4YaBP4.NgVRbOq.F7LFf5Svsv32O9DQD68S9q6', 
     'Dr. Sarah Smith',
     r.id
 FROM roles r WHERE r.name = 'ROLE_DOCTOR'
@@ -36,7 +36,7 @@ ON CONFLICT (email) DO NOTHING;
 INSERT INTO users (email, password_hash, full_name, role_id)
 SELECT 
     'john.doe@mindwell.com', 
-    '$2a$10$eAccYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORr7x.hWETncCzof9G', 
+    '$2a$12$6K.s9wvwmhla9pH4YaBP4.NgVRbOq.F7LFf5Svsv32O9DQD68S9q6', 
     'John Doe',
     r.id
 FROM roles r WHERE r.name = 'ROLE_PATIENT'
@@ -45,7 +45,7 @@ ON CONFLICT (email) DO NOTHING;
 INSERT INTO users (email, password_hash, full_name, role_id)
 SELECT 
     'jane.roe@mindwell.com', 
-    '$2a$10$eAccYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORr7x.hWETncCzof9G', 
+    '$2a$12$6K.s9wvwmhla9pH4YaBP4.NgVRbOq.F7LFf5Svsv32O9DQD68S9q6', 
     'Jane Roe',
     r.id
 FROM roles r WHERE r.name = 'ROLE_PATIENT'
