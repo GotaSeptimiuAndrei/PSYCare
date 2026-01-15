@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getAllExercises, createExercise, updateExercise, deleteExercise } from "../api/exerciseAPI";
 import type { Exercise } from "../types/exercise";
 
+
 export function useGetAllExercises() {
   return useQuery({
     queryKey: ["exercises"],
